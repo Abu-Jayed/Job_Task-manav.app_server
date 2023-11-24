@@ -26,6 +26,20 @@ async function run() {
     const manavApp_job_task = client.db("manavApp_job_task")
     const userCollection = manavApp_job_task.collection("usersData")
 
+    app.post("/userRegister", async (req, res) => {
+      const body = req.body;
+      console.log(body);
+      const result = await userCollection.insertOne(body);
+      if(result?.insertedId){
+        return res.status(200).send(result);
+      }else {
+        return res.status(404).send({
+          message: "can not insert try again leter",
+          status: false,
+        });
+      }
+    })
+
     app.get('/', (req, res) => {
       res.send('Hello World!')
     })
