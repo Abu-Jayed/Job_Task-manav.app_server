@@ -40,6 +40,32 @@ async function run() {
       }
     })
 
+    app.post("/login",async (req,res) => {
+      const login_info = req.body
+      const {email, password} = login_info
+
+      const user = await userCollection.findOne({email})
+      console.log("isexist", user);
+
+      if(user){
+        if(user.password == password){
+          return res.status(200).send(user);
+        } else {
+          return res.status(404).send({
+            message: "Wrong password",
+            status: false,
+          });
+        }
+      }else {
+        return res.status(404).send({
+          message: "can not find any email address",
+          status: false,
+        });
+      }
+
+
+    })
+
     app.get('/', (req, res) => {
       res.send('Hello World!')
     })
