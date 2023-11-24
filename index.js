@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const app = express()
 const port = 5000
@@ -25,6 +26,16 @@ async function run() {
 
     const manavApp_job_task = client.db("manavApp_job_task")
     const userCollection = manavApp_job_task.collection("usersData")
+
+    // jwt
+    app.post('/jwt', (req, res) => {
+      console.log("here i am.");
+      const user = req.body;
+      console.log(user);
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+      console.log(token);
+      res.send({token});
+  })
 
     app.post("/userRegister", async (req, res) => {
       const body = req.body;
